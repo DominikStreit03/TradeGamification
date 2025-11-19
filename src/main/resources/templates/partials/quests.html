@@ -1,0 +1,17 @@
+<div class="mt-4">
+    <h2 class="text-lg font-semibold">Daily Quests</h2>
+    <div class="grid grid-cols-1 gap-2 mt-2">
+        <div th:each="q : ${quests}" class="p-3 bg-white rounded shadow">
+            <div class="flex justify-between items-center">
+                <div th:text="${q.text}"></div>
+                <div>
+                    <form th:action="@{'/quest/complete/' + ${q.id}}" method="post">
+                        <button class="px-3 py-1 bg-green-500 text-white rounded">
+                            Complete (+<span th:text="${q.xp}"></span> XP)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
