@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Service
 public class TradeLogService {
@@ -38,7 +39,15 @@ public class TradeLogService {
         userRepository.save(user);
     }
 
-    public void removeTrade(Long tradeId) {
-        tradeLogRepository.deleteById(tradeId);
+    public void removeTrade(Long tradeId, Long requestingUserId) {
+        TradeLog trade = tradeLogRepository.findById(tradeId)
+                .orElseThrow(() -> new NoSuchElementException("Trade with id " + tradeId + " not found"));
+
+        User owner = trade.getUser();
+        if (owner == null || !owner.getId().equals(requestingUserId)) {
+            throw new IllegalArgumentException("Not authorized to delete trade id " + tradeId);
+        }
+
+        tradeLogRepository.delete(trade);
     }
 }

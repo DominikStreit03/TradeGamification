@@ -10,7 +10,24 @@
     <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4">Hoppla — ein Fehler ist aufgetreten</h1>
         <p class="mb-4">Es ist ein unerwarteter Fehler aufgetreten. Versuche bitte, dich erneut anzumelden oder kontaktiere den Administrator.</p>
-        <div>
+
+        <div th:if="${errorMessage != null}" class="mb-4">
+            <h2 class="font-semibold">Fehlermeldung</h2>
+            <p class="text-sm text-red-700" th:text="${errorMessage}"></p>
+        </div>
+
+        <div th:if="${exceptionClass != null}" class="mb-2">
+            <p class="text-xs text-gray-600">Exception: <span th:text="${exceptionClass}"></span></p>
+        </div>
+
+        <div th:if="${stackTrace != null}" class="mt-4">
+            <details>
+                <summary class="cursor-pointer text-sm text-gray-700">Stacktrace anzeigen</summary>
+                <pre class="text-xs bg-gray-100 p-3 mt-2 overflow-auto" th:text="${stackTrace}"></pre>
+            </details>
+        </div>
+
+        <div class="mt-6">
             <a th:href="@{/login}" class="px-4 py-2 bg-blue-600 text-white rounded">Zur Login-Seite</a>
             <a th:href="@{/trades}" class="ml-4 px-4 py-2 bg-gray-200 rounded">Zu den Trades</a>
         </div>
@@ -18,4 +35,3 @@
 </div>
 </body>
 </html>
-
