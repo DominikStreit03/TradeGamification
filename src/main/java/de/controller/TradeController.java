@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Controller
 public class TradeController {
@@ -199,6 +202,42 @@ public class TradeController {
         }
 
         return "redirect:" + redirectTarget;
+    }
+
+    @PostMapping({"/trade/remove/{tradeId}", "/trade/delete/{tradeId}"})
+    public String removeTrade(@PathVariable Long tradeId, HttpSession session, RedirectAttributes redirectAttributes) {
+        Long userId = (Long) session.getAttribute("userId");
+        log.debug("POST to remove trade {}, session userId={}", tradeId, userId);
+        if (userId == null) {
+            log.debug("No user in session for trade removal, redirecting to /login");
+            return "redirect:/login";
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            log.warn("User id {} not found during trade removal, invalidating session", userId);
+            // user not found -> session invalid and redirect
+            session.invalidate();
+            return "redirect:/login";
+        }
+
+        try {
+            tradeLogService.removeTrade(tradeId, userId);
+        } catch (NoSuchElementException e) {
+            log.warn("Attempt to remove non-existing trade {} by user {}", tradeId, userId);
+            redirectAttributes.addFlashAttribute("tradeError", "Trade nicht gefunden: " + e.getMessage());
+            return "redirect:/trades";
+        } catch (IllegalArgumentException e) {
+            log.warn("Unauthorized delete attempt for trade {} by user {}", tradeId, userId);
+            redirectAttributes.addFlashAttribute("tradeError", "Nicht berechtigt, diesen Trade zu löschen.");
+            return "redirect:/trades";
+        } catch (Exception e) {
+            log.error("Error while removing trade {} for user {}: {}", tradeId, userId, e.getMessage(), e);
+            // rethrow so GlobalExceptionHandler can show the error page with details
+            throw e;
+        }
+
+        return "redirect:/trades";
     }
 
     private Double parseDoubleSafe(String s) {

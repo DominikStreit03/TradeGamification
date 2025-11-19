@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
@@ -25,6 +27,11 @@ public class GlobalExceptionHandler {
     public String handleAllExceptions(Exception ex, HttpServletRequest req, Model model) {
         log.error("Unhandled exception for request {}", req.getRequestURI(), ex);
         model.addAttribute("errorMessage", ex.getMessage());
+        model.addAttribute("exceptionClass", ex.getClass().getName());
+        // include simple stack trace for debugging (can be toggled later)
+        StringWriter sw = new StringWriter();
+        ex.printStackTrace(new PrintWriter(sw));
+        model.addAttribute("stackTrace", sw.toString());
         return "error";
     }
 }
