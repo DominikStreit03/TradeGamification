@@ -8,6 +8,8 @@ import de.repository.QuestRepository;
 import de.repository.UserRepository;
 import de.service.TradeLogService;
 import de.service.StreakService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,8 @@ import java.util.Map;
 @Controller
 public class TradeController {
 
+    private static final Logger log = LoggerFactory.getLogger(TradeController.class);
+
     @Autowired
     private TradeLogService tradeLogService;
 
@@ -39,12 +43,15 @@ public class TradeController {
     @GetMapping("/trades")
     public String tradesPage(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
+        log.debug("GET /trades, session userId={}", userId);
         if (userId == null) {
+            log.debug("No user in session, redirect to /login");
             return "redirect:/login";
         }
 
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
+            log.warn("User id {} from session not found in DB, invalidating session", userId);
             // user no longer exists (e.g., DB reset) -> clear session and redirect to login
             session.invalidate();
             return "redirect:/login";
@@ -57,7 +64,9 @@ public class TradeController {
     @PostMapping("/trade/log")
     public String logTrade(TradeLogDto dto, HttpSession session, HttpServletRequest request, Model model) {
         Long userId = (Long) session.getAttribute("userId");
+        log.debug("POST /trade/log, session userId={}", userId);
         if (userId == null) {
+            log.debug("No user in session for trade submission, redirecting to /login");
             return "redirect:/login";
         }
 
@@ -76,12 +85,14 @@ public class TradeController {
 
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
+            log.warn("User id {} not found during trade submission, invalidating session", userId);
             // user not found -> session invalid and redirect
             session.invalidate();
             return "redirect:/login";
         }
 
         if (!errors.isEmpty()) {
+            log.debug("Validation errors on trade submission: {}", errors);
             // on validation error, provide the dto and errors back to the view
             model.addAttribute("user", user);
             model.addAttribute("tradeDto", dto);
@@ -136,6 +147,7 @@ public class TradeController {
         // ensure user still exists before saving
         user = userRepository.findById(userId).orElse(null);
         if (user == null) {
+            log.warn("User id {} disappeared before saving trade", userId);
             session.invalidate();
             return "redirect:/login";
         }
@@ -143,6 +155,7 @@ public class TradeController {
         try {
             tradeLogService.logTrade(userId, trade);
         } catch (Exception e) {
+            log.error("Error while saving trade for user {}: {}", userId, e.getMessage(), e);
             // return to the same view with a general error message
             model.addAttribute("user", user);
             model.addAttribute("tradeDto", dto);

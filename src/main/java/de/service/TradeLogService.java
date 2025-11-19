@@ -6,8 +6,6 @@ import de.repository.TradeLogRepository;
 import de.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
@@ -38,5 +36,9 @@ public class TradeLogService {
 
         tradeLogRepository.save(trade);
         userRepository.save(user);
+    }
+
+    public void removeTrade(Long tradeId) {
+        tradeLogRepository.deleteById(tradeId);
     }
 }

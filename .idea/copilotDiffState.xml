@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/resources/application.properties">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/resources/application.properties" />
+              <option name="originalContent" value="spring.h2.console.enabled=true&#10;spring.h2.console.path=/h2-console&#10;# file-based H2 DB (persists across restarts)&#10;# Use DB_CLOSE_DELAY=-1 instead of DB_CLOSE_ON_EXIT (newer H2 versions don't support DB_CLOSE_ON_EXIT)&#10;spring.datasource.url=jdbc:h2:file:./data/tradingdb;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1&#10;spring.datasource.driver-class-name=org.h2.Driver&#10;spring.datasource.username=sa&#10;spring.datasource.password=&#10;spring.jpa.hibernate.ddl-auto=update&#10;spring.thymeleaf.cache=false&#10;server.port=8080" />
+              <option name="updatedContent" value="spring.h2.console.enabled=true&#10;spring.h2.console.path=/h2-console&#10;# file-based H2 DB (persists across restarts)&#10;# Use DB_CLOSE_DELAY=-1 instead of DB_CLOSE_ON_EXIT (newer H2 versions don't support DB_CLOSE_ON_EXIT)&#10;spring.datasource.url=jdbc:h2:file:./data/tradingdb;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1&#10;spring.datasource.driver-class-name=org.h2.Driver&#10;spring.datasource.username=sa&#10;spring.datasource.password=&#10;spring.jpa.hibernate.ddl-auto=update&#10;spring.thymeleaf.cache=false&#10;server.port=8080" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

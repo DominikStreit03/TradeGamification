@@ -42,7 +42,7 @@
                         <th class="px-2 py-1">Entry</th>
                     </tr>
                     </thead>
-                    <tbody th:each="t : ${#lists.reverse(user.trades)}" class="text-sm">
+                    <tbody th:each="t : ${user.trades}" class="text-sm">
                     <tr>
                         <td class="px-2 py-1" th:text="${t.timestamp}"></td>
                         <td class="px-2 py-1" th:text="${t.instrument}"></td>
