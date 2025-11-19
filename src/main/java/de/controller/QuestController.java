@@ -6,6 +6,7 @@ import de.repository.UserRepository;
 import de.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,22 @@ public class QuestController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping("/quests")
+    public String questsPage(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            session.invalidate();
+            return "redirect:/login";
+        }
+
+        return "questOverview";
+    }
 
     @PostMapping("/quest/complete/{questId}")
     public String completeQuest(@PathVariable Long questId,
