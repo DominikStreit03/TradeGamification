@@ -1,4 +1,4 @@
-<div class="mt-4">
+<div th:fragment="questsFragment">
     <h2 class="text-lg font-semibold">Daily Quests</h2>
     <div class="grid grid-cols-1 gap-2 mt-2">
         <div th:each="q : ${quests}" class="p-3 bg-white rounded shadow">

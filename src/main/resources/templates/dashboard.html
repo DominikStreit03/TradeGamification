@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trading Gamification Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- Header einfügen -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<div class="container mx-auto p-4">
+    <div class="grid grid-cols-3 gap-4 mt-6">
+        <!-- Linke Spalte -->
+        <div class="col-span-2">
+            <div class="p-4 bg-white rounded shadow">
+                <h1 class="text-2xl font-bold">Dashboard</h1>
+                <div class="mt-4">
+                    <p>Username: <span th:text="${user.username}">demo</span></p>
+                    <p>Level: <span th:text="${user.level}">1</span></p>
+                    <p>XP: <span th:text="${user.xp}">0</span></p>
+                    <p>Streak: <span th:text="${user.streak}">0</span> 🔥</p>
+                </div>
+
+                <hr class="my-4"/>
+
+                <h2 class="text-lg font-semibold">Quick Trade Logger</h2>
+                <!-- Reusable create trade fragment einbinden -->
+                <div th:insert="fragments/createTrade :: createTradeFragment"></div>
+            </div>
+
+            <div class="p-4 bg-white rounded shadow mt-4">
+                <h2 class="text-lg font-semibold">Recent Trades</h2>
+                <div th:if="${#lists.isEmpty(user.trades)}">No trades yet</div>
+                <table th:if="${!#lists.isEmpty(user.trades)}" class="min-w-full divide-y divide-gray-200 mt-2">
+                    <thead>
+                    <tr class="text-left text-sm text-gray-600">
+                        <th class="px-2 py-1">Timestamp</th>
+                        <th class="px-2 py-1">Instrument</th>
+                        <th class="px-2 py-1">Result</th>
+                        <th class="px-2 py-1">Entry</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="t : ${#lists.reverse(user.trades)}" class="text-sm">
+                    <tr>
+                        <td class="px-2 py-1" th:text="${t.timestamp}"></td>
+                        <td class="px-2 py-1" th:text="${t.instrument}"></td>
+                        <td class="px-2 py-1" th:text="${t.result}"></td>
+                        <td class="px-2 py-1" th:text="${t.entryPrice}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rechte Spalte -->
+        <div>
+            <div class="p-4 bg-white rounded shadow">
+                <div th:insert="partials/quests :: questsFragment"></div>
+            </div>
+
+            <div class="p-4 bg-white rounded shadow mt-4">
+                <h2 class="text-lg font-semibold">Quick Tips</h2>
+                <ul class="list-disc list-inside">
+                    <li>Use Replay mode in TradingView for rapid practice.</li>
+                    <li>Reward yourself on Level-Up.</li>
+                    <li>Press "Avoided impulse" when you resist a trade.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

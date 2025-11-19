@@ -1,0 +1,69 @@
+<div th:fragment="createTradeFragment">
+    <div class="p-4 bg-white rounded shadow">
+        <h2 class="text-lg font-semibold">Create Trade</h2>
+
+        <!-- Display validation errors -->
+        <div th:if="${tradeErrors != null}" class="mb-2">
+            <ul class="text-sm text-red-600 list-disc list-inside">
+                <li th:each="err : ${tradeErrors.values()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <form action="/trade/log" method="post" class="grid grid-cols-1 gap-2 mt-2">
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-sm">Instrument</label>
+                    <input name="instrument" type="text" th:value="${tradeDto != null ? tradeDto.instrument : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                    <div th:if="${tradeErrors != null and tradeErrors.containsKey('instrument')}" class="text-red-600 text-sm" th:text="${tradeErrors.instrument}"></div>
+                </div>
+                <div>
+                    <label class="block text-sm">Market</label>
+                    <input name="market" type="text" th:value="${tradeDto != null ? tradeDto.market : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                    <div th:if="${tradeErrors != null and tradeErrors.containsKey('market')}" class="text-red-600 text-sm" th:text="${tradeErrors.market}"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+                <div>
+                    <label class="block text-sm">Entry Price</label>
+                    <input name="entryPrice" step="any" type="text" th:value="${tradeDto != null ? tradeDto.entryPrice : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                    <div th:if="${tradeErrors != null and tradeErrors.containsKey('entryPrice')}" class="text-red-600 text-sm" th:text="${tradeErrors.entryPrice}"></div>
+                </div>
+                <div>
+                    <label class="block text-sm">SL Price</label>
+                    <input name="slPrice" step="any" type="text" th:value="${tradeDto != null ? tradeDto.slPrice : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                    <div th:if="${tradeErrors != null and tradeErrors.containsKey('slPrice')}" class="text-red-600 text-sm" th:text="${tradeErrors.slPrice}"></div>
+                </div>
+                <div>
+                    <label class="block text-sm">TP Price</label>
+                    <input name="tpPrice" step="any" type="text" th:value="${tradeDto != null ? tradeDto.tpPrice : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                    <div th:if="${tradeErrors != null and tradeErrors.containsKey('tpPrice')}" class="text-red-600 text-sm" th:text="${tradeErrors.tpPrice}"></div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm">Result (P/L)</label>
+                <input name="result" step="any" type="text" th:value="${tradeDto != null ? tradeDto.result : ''}" class="mt-1 block w-full border rounded px-2 py-1" />
+                <div th:if="${tradeErrors != null and tradeErrors.containsKey('result')}" class="text-red-600 text-sm" th:text="${tradeErrors.result}"></div>
+            </div>
+
+            <div>
+                <label class="block text-sm">Candle Timing</label>
+                <input name="candleTiming" type="text" th:value="${tradeDto != null ? tradeDto.candleTiming : ''}" class="mt-1 block w-full border rounded px-2 py-1" placeholder="e.g. 1h, 15m, rejection" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <label><input type="checkbox" name="setupCorrect" th:checked="${tradeDto != null && tradeDto.setupCorrect}"> Setup correct</label>
+                <label><input type="checkbox" name="entryCorrect" th:checked="${tradeDto != null && tradeDto.entryCorrect}"> Entry correct</label>
+                <label><input type="checkbox" name="slCorrect" th:checked="${tradeDto != null && tradeDto.slCorrect}"> SL correct</label>
+                <label><input type="checkbox" name="tpCorrect" th:checked="${tradeDto != null && tradeDto.tpCorrect}"> TP correct</label>
+                <label><input type="checkbox" name="respectedKill" th:checked="${tradeDto != null && tradeDto.respectedKill}"> Respected kill</label>
+                <label><input type="checkbox" name="avoidedImpulse" th:checked="${tradeDto != null && tradeDto.avoidedImpulse}"> Avoided impulse</label>
+            </div>
+
+            <div class="mt-2">
+                <button class="px-4 py-2 bg-blue-600 text-white rounded">Save Trade</button>
+            </div>
+        </form>
+    </div>
+</div>

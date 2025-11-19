@@ -1,0 +1,26 @@
+<div th:fragment="headerFragment">
+    <header class="p-4 bg-white shadow">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-xl font-bold">Trading Gamification</div>
+
+            <nav class="flex items-center space-x-4">
+                <a th:href="@{/}" class="text-sm text-gray-700">Dashboard</a>
+                <a th:href="@{/trades}" class="text-sm text-gray-700">Trades</a>
+            </nav>
+
+            <div>
+                <div th:if="${session.username != null}">
+                    <span>Signed in as <strong th:text="${session.username}"></strong></span>
+                    <span class="mx-2">|</span>
+                    <a th:href="@{/logout}" class="text-sm text-blue-600">Logout</a>
+                    <span class="mx-4"></span>
+                    <span th:if="${user != null}">Level: <span th:text="${user.level}"></span> | XP: <span th:text="${user.xp}"></span></span>
+                </div>
+                <div th:unless="${session.username != null}">
+                    <a th:href="@{/login}" class="text-sm text-blue-600 mr-3">Login</a>
+                    <a th:href="@{/register}" class="text-sm text-blue-600">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fehler - Trading Gamification</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+<div class="container mx-auto p-6">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+        <h1 class="text-2xl font-bold mb-4">Hoppla — ein Fehler ist aufgetreten</h1>
+        <p class="mb-4">Es ist ein unerwarteter Fehler aufgetreten. Versuche bitte, dich erneut anzumelden oder kontaktiere den Administrator.</p>
+        <div>
+            <a th:href="@{/login}" class="px-4 py-2 bg-blue-600 text-white rounded">Zur Login-Seite</a>
+            <a th:href="@{/trades}" class="ml-4 px-4 py-2 bg-gray-200 rounded">Zu den Trades</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
