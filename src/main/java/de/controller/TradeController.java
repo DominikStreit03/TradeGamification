@@ -201,6 +201,33 @@ public class TradeController {
         return "redirect:" + redirectTarget;
     }
 
+    @PostMapping("/trade/remove/{tradeId}")
+    public String removeTrade(Long tradeId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        log.debug("POST /trade/log to remove trade {}, session userId={}", tradeId, userId);
+        if (userId == null) {
+            log.debug("No user in session for trade removal, redirecting to /login");
+            return "redirect:/login";
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            log.warn("User id {} not found during trade removal, invalidating session", userId);
+            // user not found -> session invalid and redirect
+            session.invalidate();
+            return "redirect:/login";
+        }
+
+        try {
+            tradeLogService.removeTrade(tradeId);
+        } catch (Exception e) {
+            log.error("Error while removing trade {} for user {}: {}", tradeId, userId, e.getMessage(), e);
+            // on error, just redirect back to trades
+        }
+
+        return "redirect:/trades";
+    }
+
     private Double parseDoubleSafe(String s) {
         if (s == null) return null;
         String t = s.trim();
